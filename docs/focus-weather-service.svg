@@ -1,0 +1,62 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1860" height="960" viewBox="0 0 1860 960" font-family="Noto Sans CJK KR, 'Malgun Gothic', 'Apple SD Gothic Neo', sans-serif">
+<defs><marker id="ah-374151" markerWidth="11" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L11,4.5 L0,9 z" fill="#374151"/></marker><marker id="as-374151" markerWidth="11" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M11,0 L0,4.5 L11,9 z" fill="#374151"/></marker><marker id="ah-3B82F6" markerWidth="11" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L11,4.5 L0,9 z" fill="#3B82F6"/></marker><marker id="as-3B82F6" markerWidth="11" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M11,0 L0,4.5 L11,9 z" fill="#3B82F6"/></marker><marker id="ah-6366F1" markerWidth="11" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L11,4.5 L0,9 z" fill="#6366F1"/></marker><marker id="as-6366F1" markerWidth="11" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M11,0 L0,4.5 L11,9 z" fill="#6366F1"/></marker><marker id="ah-16A34A" markerWidth="11" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L11,4.5 L0,9 z" fill="#16A34A"/></marker><marker id="as-16A34A" markerWidth="11" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M11,0 L0,4.5 L11,9 z" fill="#16A34A"/></marker><marker id="ah-F97316" markerWidth="11" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L11,4.5 L0,9 z" fill="#F97316"/></marker><marker id="as-F97316" markerWidth="11" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M11,0 L0,4.5 L11,9 z" fill="#F97316"/></marker><marker id="ah-A855F7" markerWidth="11" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L11,4.5 L0,9 z" fill="#A855F7"/></marker><marker id="as-A855F7" markerWidth="11" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M11,0 L0,4.5 L11,9 z" fill="#A855F7"/></marker><marker id="ah-9CA3AF" markerWidth="11" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L11,4.5 L0,9 z" fill="#9CA3AF"/></marker><marker id="as-9CA3AF" markerWidth="11" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M11,0 L0,4.5 L11,9 z" fill="#9CA3AF"/></marker><marker id="ah-D97706" markerWidth="11" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L11,4.5 L0,9 z" fill="#D97706"/></marker><marker id="as-D97706" markerWidth="11" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M11,0 L0,4.5 L11,9 z" fill="#D97706"/></marker><marker id="ah-111827" markerWidth="11" markerHeight="9" refX="10" refY="4.5" orient="auto"><path d="M0,0 L11,4.5 L0,9 z" fill="#111827"/></marker><marker id="as-111827" markerWidth="11" markerHeight="9" refX="1" refY="4.5" orient="auto"><path d="M11,0 L0,4.5 L11,9 z" fill="#111827"/></marker></defs><rect width="1860" height="960" fill="#FFFFFF"/>
+<rect x="612.0" y="387.0" width="416" height="126" rx="18" fill="none" stroke="#22C55E" stroke-width="3" opacity="0.5"/>
+<rect x="620.0" y="395.0" width="400" height="110" rx="12" fill="#DCFCE7" stroke="#22C55E" stroke-width="3.5"/>
+<text x="820" y="428" font-size="22" font-weight="bold" text-anchor="middle" fill="#111827">weather-service  :8090</text>
+<text x="820" y="448" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">좌표 · 지역의 지금 날씨와 오늘 비</text>
+<text x="820" y="464" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">API 1개  (공개 1) · DB 없음 · 이벤트 없음</text>
+<text x="612.0" y="381.0" font-size="13" font-weight="bold" text-anchor="start" fill="#22C55E">이 레포</text>
+<rect x="55.0" y="255.0" width="250" height="90" rx="12" fill="#DBEAFE" stroke="#3B82F6" stroke-width="2.2"/>
+<text x="180" y="278" font-size="17" font-weight="bold" text-anchor="middle" fill="#111827">gateway-server</text>
+<text x="180" y="298" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">토큰 검증</text>
+<text x="180" y="314" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">X-User-Id · X-User-Role 주입</text>
+<rect x="55.0" y="525.0" width="250" height="110" rx="12" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="2.2"/>
+<text x="180" y="550" font-size="17" font-weight="bold" text-anchor="middle" fill="#111827">화면 셋</text>
+<text x="180" y="570" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">첫 화면 배너 — 브라우저 위치</text>
+<text x="180" y="586" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">검색 결과 — 검색한 지역</text>
+<text x="180" y="602" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">장소 상세 — 장소 좌표</text>
+<rect x="670.0" y="80.0" width="300" height="80" rx="12" fill="#E0E7FF" stroke="#6366F1" stroke-width="2.2"/>
+<text x="820" y="106" font-size="17" font-weight="bold" text-anchor="middle" fill="#111827">config-server</text>
+<text x="820" y="126" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">포트 · 기상청 주소 · 키 자리 · 차단기 값</text>
+<rect x="1410.0" y="80.0" width="300" height="80" rx="12" fill="#E0E7FF" stroke="#6366F1" stroke-width="2.2"/>
+<text x="1560" y="106" font-size="17" font-weight="bold" text-anchor="middle" fill="#111827">eureka-server</text>
+<text x="1560" y="126" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">등록 · lb:// 해석</text>
+<rect x="1410.0" y="325.0" width="300" height="110" rx="12" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="2.2" stroke-dasharray="9,7"/>
+<text x="1560" y="350" font-size="17" font-weight="bold" text-anchor="middle" fill="#111827">기상청 단기예보</text>
+<text x="1560" y="370" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">공공데이터포털 getVilageFcst</text>
+<text x="1560" y="386" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">하루 8번 발표 · 10분 뒤부터</text>
+<text x="1560" y="402" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">틀린 키는 403 + 게이트웨이 봉투</text>
+<rect x="1410.0" y="585.0" width="300" height="110" rx="12" fill="#FFEDD5" stroke="#F97316" stroke-width="2.2"/>
+<text x="1560" y="610" font-size="17" font-weight="bold" text-anchor="middle" fill="#111827">Redis  :6379</text>
+<text x="1560" y="630" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">weather:forecast:{nx}:{ny}:{발표}</text>
+<text x="1560" y="646" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">격자 · 발표마다 7시간</text>
+<text x="1560" y="662" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">직전 발표 폴백도 여기서</text>
+<rect x="660.0" y="740.0" width="320" height="80" rx="12" fill="#F3E8FF" stroke="#A855F7" stroke-width="2.2" stroke-dasharray="9,7"/>
+<text x="820" y="758" font-size="17" font-weight="bold" text-anchor="middle" fill="#111827">Prometheus</text>
+<text x="820" y="778" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">resilience4j_circuitbreaker_state</text>
+<text x="820" y="794" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">name=kma</text>
+<polyline points="180,525.0 180,345.0" fill="none" stroke="#3B82F6" stroke-width="2.4" marker-end="url(#ah-3B82F6)"/>
+<rect x="192" y="418" width="88" height="19" rx="4" fill="#FFFFFF" opacity="0.92"/>
+<text x="196" y="430" font-size="13" font-weight="normal" text-anchor="start" fill="#3B82F6">좌표 또는 지역</text>
+<polyline points="305.0,300 470,300 470,450 620,450" fill="none" stroke="#3B82F6" stroke-width="2.4" marker-end="url(#ah-3B82F6)"/>
+<rect x="314" y="276" width="135" height="19" rx="4" fill="#FFFFFF" opacity="0.92"/>
+<text x="318" y="288" font-size="13" font-weight="normal" text-anchor="start" fill="#3B82F6">GET /api/v1/weather</text>
+<polyline points="820,160.0 820,395.0" fill="none" stroke="#6366F1" stroke-width="2.4" marker-end="url(#ah-6366F1)"/>
+<rect x="782" y="258" width="76" height="19" rx="4" fill="#FFFFFF" opacity="0.92"/>
+<text x="820.0" y="269.5" font-size="13" font-weight="normal" text-anchor="middle" fill="#6366F1">기동 시 설정</text>
+<polyline points="1020,430 1120,430 1120,120 1410.0,120" fill="none" stroke="#6366F1" stroke-width="2.4" marker-end="url(#ah-6366F1)"/>
+<rect x="1128" y="193" width="34" height="19" rx="4" fill="#FFFFFF" opacity="0.92"/>
+<text x="1132" y="205" font-size="13" font-weight="normal" text-anchor="start" fill="#6366F1">등록</text>
+<polyline points="1020,450 1240,450 1240,380 1410,380" fill="none" stroke="#F97316" stroke-width="2.4" marker-end="url(#ah-F97316)" stroke-dasharray="7,6"/>
+<rect x="1248" y="356" width="195" height="19" rx="4" fill="#FFFFFF" opacity="0.92"/>
+<text x="1252" y="368" font-size="13" font-weight="normal" text-anchor="start" fill="#F97316">회로 차단기 kma · 재시도는 05 만</text>
+<polyline points="1020,480 1280,480 1280,640 1410,640" fill="none" stroke="#F97316" stroke-width="2.4" marker-end="url(#ah-F97316)" marker-start="url(#as-F97316)"/>
+<rect x="1288" y="548" width="125" height="19" rx="4" fill="#FFFFFF" opacity="0.92"/>
+<text x="1292" y="560" font-size="13" font-weight="normal" text-anchor="start" fill="#F97316">격자 + 발표로 읽고 씀</text>
+<polyline points="820,740.0 820,505.0" fill="none" stroke="#A855F7" stroke-width="2.4" marker-end="url(#ah-A855F7)" stroke-dasharray="7,6"/>
+<rect x="828" y="628" width="145" height="19" rx="4" fill="#FFFFFF" opacity="0.92"/>
+<text x="832" y="640" font-size="13" font-weight="normal" text-anchor="start" fill="#A855F7">/actuator/prometheus</text>
+<text x="40" y="880" font-size="13" font-weight="normal" text-anchor="start" fill="#4B5563">캐시 → 기상청 → 자료 없음(03)이면 직전 발표 · 못 부르면 캐시의 직전 발표(stale) · 둘 다 없으면 503 WEATHER_UNAVAILABLE — 화면은 날씨 자리를 숨김</text>
+<text x="40" y="902" font-size="13" font-weight="normal" text-anchor="start" fill="#4B5563">좌표는 활용가이드 변환식으로, 지역은 레포에 담은 기상청 격자 표(2026.7 판 · 시도 16 · 시군구 256)로 격자를 찾음 · 광주 · 전남은 12 · 못 찾으면 시도 대표</text>
+<text x="40" y="924" font-size="13" font-weight="normal" text-anchor="start" fill="#4B5563">실패가 쌓이면 차단기가 열려 30초 동안 기상청을 부르지 않음 · 다른 서비스는 부르지 않음 · 키는 ingest 와 같은 공공데이터포털 계정 키</text>
+<text x="1836" y="948" font-size="11" text-anchor="end" fill="#9CA3AF">weather-service 를 중심으로 · 직접 연결된 것만</text></svg>
