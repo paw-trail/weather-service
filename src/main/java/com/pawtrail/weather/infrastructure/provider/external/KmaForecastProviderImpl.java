@@ -19,6 +19,7 @@ import org.springframework.cloud.client.circuitbreaker.CircuitBreakerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.ResourceAccessException;
 import org.springframework.web.client.RestClient;
+import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestClientResponseException;
 
 /**
@@ -76,8 +77,15 @@ public class KmaForecastProviderImpl implements ForecastProvider {
      *
      * 회로 차단기는 공급자가 던진 예외를 한 겹 감싸 넘기므로 그 문구를 그대로 쓰면
      * 앞에 예외 클래스 이름이 붙습니다 (2026.9.20 실물). 사슬을 따라 원래 예외를 찾아 그 코드와 문구만 적습니다.
+     *
+     * 어느 갈래로 만든 문구든 마지막에 인증키를 가립니다.
+     * 이 서비스가 모르는 예외의 문구에도 요청 주소가 통째로 들어갈 수 있기 때문입니다.
      */
     static String reason(Throwable failure) {
+        return maskKey(rawReason(failure));
+    }
+
+    private static String rawReason(Throwable failure) {
         for (Throwable cause = failure; cause != null; cause = cause.getCause()) {
             if (cause instanceof CallNotPermittedException) {
                 return "회로 차단기가 열려 있어 부르지 않음";
@@ -92,8 +100,16 @@ public class KmaForecastProviderImpl implements ForecastProvider {
         return "기상청 호출 실패";
     }
 
+    // 인증키가 든 문구를 가진 예외는 이 메서드 밖으로 그대로 내보내지 않음
+    // 가린 문구로 KmaApiException 을 새로 만들고 원래 예외는 붙이지 않음 — 스택을 찍는 곳이 생겨도 키가 안 샘
     private Optional<ForecastRun> fetchWithRetry(Grid grid, LocalDateTime baseAt) {
-        URI uri = uri(grid, baseAt);
+        URI uri;
+        try {
+            uri = uri(grid, baseAt);
+        } catch (IllegalArgumentException e) {
+            // base-url 설정이 잘못된 경우 — URI.create 의 문구에 주소가 통째로 들어감
+            throw new KmaApiException("URI", "요청 주소를 만들지 못함 — " + maskKey(e.getMessage()), false);
+        }
         KmaApiException last = null;
         for (int attempt = 1; attempt <= kma.maxAttempts(); attempt++) {
             try {
@@ -121,11 +137,15 @@ public class KmaForecastProviderImpl implements ForecastProvider {
                 }
                 last = new KmaApiException(response.code(), message, true, e);
             } catch (ResourceAccessException e) {
-                // 이 예외의 문구에는 요청 주소가 통째로 들어 있어 인증키를 가려서 담음
-                last = new KmaApiException("IO", "연결 실패 · 시간 초과 — " + maskKey(e.getMessage()), true, e);
+                // 이 예외의 문구에는 요청 주소가 통째로 들어 있어 인증키를 가려서 담고 원래 예외는 붙이지 않음
+                last = new KmaApiException("IO", "연결 실패 · 시간 초과 ("
+                        + e.getMostSpecificCause().getClass().getSimpleName() + ") — " + maskKey(e.getMessage()), true);
+            } catch (RestClientException e) {
+                // 응답을 받았지만 꺼내지 못한 경우 등 — 다시 불러도 같으므로 다시 안 함
+                throw new KmaApiException("CLIENT", "응답을 다루지 못함 — " + maskKey(e.getMessage()), false);
             }
             log.warn("기상청 호출 실패 {}/{} 코드={} 까닭={} uri={}",
-                    attempt, kma.maxAttempts(), last.getCode(), last.getMessage(), masked(uri));
+                    attempt, kma.maxAttempts(), last.getCode(), maskKey(last.getMessage()), masked(uri));
             if (attempt < kma.maxAttempts()) {
                 sleep(kma.retryBackoffMs() << (attempt - 1));
             }

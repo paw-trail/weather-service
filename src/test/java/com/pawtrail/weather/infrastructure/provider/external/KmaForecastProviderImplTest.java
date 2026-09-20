@@ -33,6 +33,18 @@ class KmaForecastProviderImplTest {
     }
 
     @Test
+    @DisplayName("모르는 예외의 문구에 요청 주소가 들어 있어도 까닭에서는 인증키를 가림 (CodeRabbit 지적)")
+    void 모르는_예외의_키() {
+        IllegalArgumentException unknown = new IllegalArgumentException("Illegal character in query at index 120: "
+                + "https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst?serviceKey=abc%2Bdef%3D%3D&pageNo=1");
+
+        assertThat(KmaForecastProviderImpl.reason(new RuntimeException(unknown)))
+                .startsWith("기상청 호출 실패 — java.lang.IllegalArgumentException")
+                .contains("serviceKey=***&pageNo=1")
+                .doesNotContain("abc%2Bdef");
+    }
+
+    @Test
     @DisplayName("연결 실패 문구에 섞인 요청 주소의 인증키를 가림")
     void 키_가리기() {
         String message = "I/O error on GET request for \"https://apis.data.go.kr/1360000/VilageFcstInfoService_2.0/getVilageFcst"
