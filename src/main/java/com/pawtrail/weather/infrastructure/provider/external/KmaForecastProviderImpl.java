@@ -25,7 +25,7 @@ import org.springframework.web.client.RestClientResponseException;
  * 기상청 단기예보(getVilageFcst)를 부릅니다.
  *
  * 호출 하나를 회로 차단기로 감싸고, 그 안에서 일시적인 실패에만 다시 시도합니다.
- *   다시 시도함    시간 초과 · 연결 실패 · 5xx · 기상청 일시 오류 코드 (01 · 02 · 04 · 05 · 99)
+ *   다시 시도함    시간 초과 · 연결 실패 · 5xx · 서비스 연결 실패 오류 코드 05
  *   다시 안 함     인증키 · 파라미터 · 요청 한도 — 다시 불러도 같고 한도만 씀 (ingest 선례)
  *   실패 아님      03 자료 없음 — 빈 값으로 돌려 서비스가 직전 발표를 쓰게 함
  * 차단기가 열려 있으면 기상청을 아예 부르지 않고 바로 ForecastUnavailableException 을 던집니다.
@@ -67,11 +67,29 @@ public class KmaForecastProviderImpl implements ForecastProvider {
         return circuitBreakerFactory.create(CIRCUIT_BREAKER_ID).run(
                 () -> fetchWithRetry(grid, baseAt),
                 failure -> {
-                    String why = failure instanceof CallNotPermittedException
-                            ? "회로 차단기가 열려 있어 부르지 않음"
-                            : "기상청 호출 실패 — " + failure.getMessage();
-                    throw new ForecastUnavailableException(why, failure);
+                    throw new ForecastUnavailableException(reason(failure), failure);
                 });
+    }
+
+    /**
+     * 서비스 로그에 남길 실패 까닭입니다.
+     *
+     * 회로 차단기는 공급자가 던진 예외를 한 겹 감싸 넘기므로 그 문구를 그대로 쓰면
+     * 앞에 예외 클래스 이름이 붙습니다 (2026.9.20 실물). 사슬을 따라 원래 예외를 찾아 그 코드와 문구만 적습니다.
+     */
+    static String reason(Throwable failure) {
+        for (Throwable cause = failure; cause != null; cause = cause.getCause()) {
+            if (cause instanceof CallNotPermittedException) {
+                return "회로 차단기가 열려 있어 부르지 않음";
+            }
+            if (cause instanceof KmaApiException kma) {
+                return "기상청 호출 실패 — 코드 " + kma.getCode() + " · " + kma.getMessage();
+            }
+            if (cause.getCause() == null) {
+                return "기상청 호출 실패 — " + cause;
+            }
+        }
+        return "기상청 호출 실패";
     }
 
     private Optional<ForecastRun> fetchWithRetry(Grid grid, LocalDateTime baseAt) {
@@ -92,16 +110,19 @@ public class KmaForecastProviderImpl implements ForecastProvider {
                         last = new KmaApiException(response.code(), response.message(), true);
                 }
             } catch (RestClientResponseException e) {
+                // 4xx 는 본문이 기상청 일시 오류 코드를 댈 때만 다시 시도함 — 읽지 못한 4xx 를 되풀이하지 않음
+                // 틀린 키는 HTTP 403 과 게이트웨이 봉투(30)로 옴 (2026.9.20 실물)
                 KmaResponse response = KmaResponseParser.parse(e.getResponseBodyAsString(), grid, baseAt);
                 boolean retryable = e.getStatusCode().is5xxServerError()
-                        || response.status() == KmaResponse.Status.RETRYABLE;
+                        || KmaResponseParser.RETRYABLE_CODES.contains(response.code());
+                String message = "HTTP " + e.getStatusCode().value() + " · " + response.message();
                 if (!retryable) {
-                    throw new KmaApiException(response.code(), "HTTP " + e.getStatusCode().value()
-                            + " " + response.message(), false, e);
+                    throw new KmaApiException(response.code(), message, false, e);
                 }
-                last = new KmaApiException(response.code(), "HTTP " + e.getStatusCode().value(), true, e);
+                last = new KmaApiException(response.code(), message, true, e);
             } catch (ResourceAccessException e) {
-                last = new KmaApiException("IO", "연결 실패 · 시간 초과 — " + e.getMessage(), true, e);
+                // 이 예외의 문구에는 요청 주소가 통째로 들어 있어 인증키를 가려서 담음
+                last = new KmaApiException("IO", "연결 실패 · 시간 초과 — " + maskKey(e.getMessage()), true, e);
             }
             log.warn("기상청 호출 실패 {}/{} 코드={} 까닭={} uri={}",
                     attempt, kma.maxAttempts(), last.getCode(), last.getMessage(), masked(uri));
@@ -124,9 +145,13 @@ public class KmaForecastProviderImpl implements ForecastProvider {
         return URI.create(kma.baseUrl() + OPERATION + "?" + query);
     }
 
-    // 로그에 인증키가 남지 않게 가림
     private static String masked(URI uri) {
-        return uri.toString().replaceAll("(serviceKey=)[^&]+", "$1***");
+        return maskKey(uri.toString());
+    }
+
+    // 로그 · 예외 문구에 인증키가 남지 않게 가림
+    static String maskKey(String text) {
+        return text == null ? null : text.replaceAll("(serviceKey=)[^&\\s\"]+", "$1***");
     }
 
     private static void sleep(long millis) {

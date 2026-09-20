@@ -56,16 +56,40 @@ class KmaResponseParserTest {
     }
 
     @Test
-    @DisplayName("기상청 일시 오류는 다시 시도 · 인증키 · 한도는 다시 안 함")
+    @DisplayName("서비스 연결 실패(05)만 다시 시도 · 기타 오류 · 인증키 · 한도는 다시 안 함")
     void 오류_가르기() {
         assertThat(KmaResponseParser.parse(header("05", "SERVICETIME_OUT"), GRID, BASE).status()).isEqualTo(Status.RETRYABLE);
-        assertThat(KmaResponseParser.parse(header("99", "UNKNOWN_ERROR"), GRID, BASE).status()).isEqualTo(Status.RETRYABLE);
+        assertThat(KmaResponseParser.parse(header("99", "UNKNOWN_ERROR"), GRID, BASE).status()).isEqualTo(Status.PERMANENT);
         assertThat(KmaResponseParser.parse(header("22", "LIMITED"), GRID, BASE).status()).isEqualTo(Status.PERMANENT);
         assertThat(KmaResponseParser.parse(header("10", "INVALID"), GRID, BASE).status()).isEqualTo(Status.PERMANENT);
     }
 
     @Test
-    @DisplayName("게이트웨이가 XML 로 막은 응답 — 미등록 키 30 은 다시 안 함")
+    @DisplayName("게이트웨이가 JSON 봉투로 막은 응답 — 틀린 키에 HTTP 403 과 함께 온 본문 그대로 (2026.9.20 실물)")
+    void 게이트웨이_JSON() {
+        String body = "{\n  \"OpenAPI_ServiceResponse\": {\n    \"cmmMsgHeader\": {\n"
+                + "      \"errMsg\": \"SERVICE_KEY_IS_NOT_REGISTERED_ERROR\",\n"
+                + "      \"returnAuthMsg\": \"등록되지 않은 서비스키\",\n"
+                + "      \"returnReasonCode\": \"30\"\n    }\n  }\n}";
+
+        KmaResponse response = KmaResponseParser.parse(body, GRID, BASE);
+
+        assertThat(response.status()).isEqualTo(Status.PERMANENT);
+        assertThat(response.code()).isEqualTo("30");
+        assertThat(response.message()).isEqualTo("SERVICE_KEY_IS_NOT_REGISTERED_ERROR · 등록되지 않은 서비스키");
+    }
+
+    @Test
+    @DisplayName("게이트웨이 봉투라도 일시 오류 코드(05)면 다시 시도")
+    void 게이트웨이_일시_오류() {
+        String body = "{\"OpenAPI_ServiceResponse\":{\"cmmMsgHeader\":{\"errMsg\":\"SERVICE ERROR\","
+                + "\"returnAuthMsg\":\"SERVICETIME_OUT\",\"returnReasonCode\":\"05\"}}}";
+
+        assertThat(KmaResponseParser.parse(body, GRID, BASE).status()).isEqualTo(Status.RETRYABLE);
+    }
+
+    @Test
+    @DisplayName("같은 봉투가 XML 로 오면 문구를 모두 모음 — 미등록 키 30 은 다시 안 함")
     void 게이트웨이_XML() {
         String xml = "<OpenAPI_ServiceResponse><cmmMsgHeader><errMsg>SERVICE ERROR</errMsg>"
                 + "<returnAuthMsg>SERVICE_KEY_IS_NOT_REGISTERED_ERROR</returnAuthMsg>"
@@ -75,14 +99,22 @@ class KmaResponseParserTest {
 
         assertThat(response.status()).isEqualTo(Status.PERMANENT);
         assertThat(response.code()).isEqualTo("30");
-        assertThat(response.message()).isEqualTo("SERVICE_KEY_IS_NOT_REGISTERED_ERROR");
+        assertThat(response.message()).isEqualTo("SERVICE ERROR · SERVICE_KEY_IS_NOT_REGISTERED_ERROR");
     }
 
     @Test
-    @DisplayName("빈 응답 · 읽을 수 없는 응답은 다시 시도")
-    void 빈_응답() {
+    @DisplayName("모르는 모양은 다시 안 하고 본문 앞부분을 문구에 담음 · 읽을 수 없는 응답과 빈 응답은 다시 시도")
+    void 모르는_모양() {
+        KmaResponse unknown = KmaResponseParser.parse("{\"error\":\"quota\"}", GRID, BASE);
+        assertThat(unknown.status()).isEqualTo(Status.PERMANENT);
+        assertThat(unknown.code()).isEqualTo("UNKNOWN");
+        assertThat(unknown.message()).contains("{\"error\":\"quota\"}");
+
+        KmaResponse unreadable = KmaResponseParser.parse("Forbidden", GRID, BASE);
+        assertThat(unreadable.status()).isEqualTo(Status.RETRYABLE);
+        assertThat(unreadable.message()).contains("Forbidden");
+
         assertThat(KmaResponseParser.parse("", GRID, BASE).status()).isEqualTo(Status.RETRYABLE);
-        assertThat(KmaResponseParser.parse("{not json", GRID, BASE).status()).isEqualTo(Status.RETRYABLE);
     }
 
     private static String ok(String items) {

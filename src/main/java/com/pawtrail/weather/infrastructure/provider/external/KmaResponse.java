@@ -17,7 +17,7 @@ public record KmaResponse(Status status, ForecastRun run, String code, String me
         OK,
         // 그 발표 자료가 아직 없음 (03) — 실패가 아니라 직전 발표를 쓰라는 뜻
         NO_DATA,
-        // 다시 불러 볼 만한 실패 — 기상청 쪽 일시 오류
+        // 다시 불러 볼 만한 실패 — 서비스 연결 실패(05) · 빈 응답 · 읽을 수 없는 응답
         RETRYABLE,
         // 다시 불러도 같은 실패 — 인증키 · 파라미터 · 요청 한도
         PERMANENT
