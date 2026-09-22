@@ -11,10 +11,10 @@
 <text x="180" y="298" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">토큰 검증</text>
 <text x="180" y="314" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">X-User-Id · X-User-Role 주입</text>
 <rect x="55.0" y="525.0" width="250" height="110" rx="12" fill="#F3F4F6" stroke="#9CA3AF" stroke-width="2.2"/>
-<text x="180" y="550" font-size="17" font-weight="bold" text-anchor="middle" fill="#111827">화면 셋</text>
-<text x="180" y="570" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">첫 화면 배너 — 브라우저 위치</text>
-<text x="180" y="586" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">검색 결과 — 검색한 지역</text>
-<text x="180" y="602" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">장소 상세 — 장소 좌표</text>
+<text x="180" y="550" font-size="17" font-weight="bold" text-anchor="middle" fill="#111827">웹 화면 — 날씨 띠</text>
+<text x="180" y="570" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">메인 · 검색 · 장소 상세</text>
+<text x="180" y="586" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">일정 · 최근 본 장소</text>
+<text x="180" y="602" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">내 위치는 보내지 않음</text>
 <rect x="670.0" y="80.0" width="300" height="80" rx="12" fill="#E0E7FF" stroke="#6366F1" stroke-width="2.2"/>
 <text x="820" y="106" font-size="17" font-weight="bold" text-anchor="middle" fill="#111827">config-server</text>
 <text x="820" y="126" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">포트 · 기상청 주소 · 키 자리 · 차단기 값</text>
@@ -36,8 +36,8 @@
 <text x="820" y="778" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">resilience4j_circuitbreaker_state</text>
 <text x="820" y="794" font-size="12" font-weight="normal" text-anchor="middle" fill="#4B5563">name=kma</text>
 <polyline points="180,525.0 180,345.0" fill="none" stroke="#3B82F6" stroke-width="2.4" marker-end="url(#ah-3B82F6)"/>
-<rect x="192" y="418" width="88" height="19" rx="4" fill="#FFFFFF" opacity="0.92"/>
-<text x="196" y="430" font-size="13" font-weight="normal" text-anchor="start" fill="#3B82F6">좌표 또는 지역</text>
+<rect x="192" y="418" width="239" height="19" rx="4" fill="#FFFFFF" opacity="0.92"/>
+<text x="196" y="430" font-size="13" font-weight="normal" text-anchor="start" fill="#3B82F6">고른 지역만 (sidoCode · sigunguName)</text>
 <polyline points="305.0,300 470,300 470,450 620,450" fill="none" stroke="#3B82F6" stroke-width="2.4" marker-end="url(#ah-3B82F6)"/>
 <rect x="314" y="276" width="135" height="19" rx="4" fill="#FFFFFF" opacity="0.92"/>
 <text x="318" y="288" font-size="13" font-weight="normal" text-anchor="start" fill="#3B82F6">GET /api/v1/weather</text>
